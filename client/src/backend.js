@@ -1,2 +1,2 @@
-export const API = "http://localhost:8000";
+export const API = process.env.PORT || "http://localhost:8000";
 
