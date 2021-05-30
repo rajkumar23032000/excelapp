@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { API } from './backend';
 import InstructionsOffCanvas from './components/InstructionsOffCanvas';
+import Navbar from './components/Navbar';
 
 const App = () => {
 
@@ -39,7 +40,8 @@ const App = () => {
       body: data
     }).then(item => {
       item.json().then(actual => {
-        setValues(actual)
+        let shuffledArray = actual.sort((a, b) => 0.5 - Math.random());
+        setValues(shuffledArray)
         setState({ ...state, uploaded: true })
         setIndex({ ...index, position: 0, display: false })
 
@@ -81,17 +83,17 @@ const App = () => {
       <div className="container">
         <form>
           <div className="mb-3">
-            <label className="form-label">Upload Excel File</label>
+            <label className="form-label fst-italic text-light">Upload Excel File</label>
             <input name="excel" onChange={handleOnChange} type="file" className="form-control" encType="multipart/form-data" />
           </div>
-          <button onClick={onClickHandle} className="btn btn-secondary">Upload</button>
+          <button onClick={onClickHandle} className="btn btn-outline-info">Upload</button>
           {state.uploaded && (
             <h3 className="badge bg-success rounded-pill">File Uploaded Successfully!!</h3>
           )}
         </form>
 
         <div className="d-grid gap-2 mt-4">
-          <button onClick={handleDisplayButton} className="btn btn-success fw-bold">Display Results</button>
+          <button style={{ visibility: state.uploaded ? "" : "hidden" }} onClick={handleDisplayButton} className="btn btn-outline-info fw-bold">Show Questions</button>
         </div>
       </div>
     )
@@ -101,37 +103,40 @@ const App = () => {
 
 
   return (
-    <div className="container mt-4 p-4">
-      {!index.display && InstructionsOffCanvas()}
-      {uploadForm()}
-      {state.uploaded && index.display && (
-        <div className="container mt-4">
-          <div className="row">
-            <div className="col-lg-8 col-md-6 col-sm-12 col-12">
-              <div className="card">
-                <div className="card-body">
-                  <p className="fw-bold text-muted">{index.position + 1}</p>
-                  <p className="card-text">{values[index.position]['Question']}</p>
-                  {index.displayAnswer && (
-                    <h3 className="text-success fw-bold">Answer : {values[index.position]['Answer']}
-                    </h3>
-                  )}
+    <div>
+      <Navbar />
+      <div className="container mt-4 p-4">
+        {!index.display && InstructionsOffCanvas()}
+        {uploadForm()}
+        {state.uploaded && index.display && (
+          <div className="container mt-4">
+            <div className="row">
+              <div className="col-lg-8 col-md-6 col-sm-12 col-12">
+                <div className="card">
+                  <div className="card-body">
+                    <p className="fw-bold text-muted">{index.position + 1}</p>
+                    <p className="card-text">{values[index.position]['Question']}</p>
+                    {index.displayAnswer && (
+                      <h3 className="text-success fw-bold">Answer : {values[index.position]['Answer']}
+                      </h3>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col-lg-4 col-md-6 col-sm-12 col-12">
-              <div className="d-grid">
-                <button onClick={handleAnsweButton} className="btn btn-outline-dark fw-bold mt-2">Show Answer</button>
-                <br />
-                <button style={{ visibility: index.position + 1 == 1 ? "hidden" : "" }} onClick={handlePreviousButton} className="btn btn-outline-warning fw-bold">Previous</button>
-                <br />
-                <button style={{ visibility: index.position + 1 <= noOfQuestions - 1 ? "" : "hidden" }} onClick={handleNextButton} className="btn btn-outline-primary fw-bold">Next</button>
-              </div>
+              <div className="col-lg-4 col-md-6 col-sm-12 col-12">
+                <div className="d-grid">
+                  <button onClick={handleAnsweButton} className="btn btn-outline-info fw-bold mt-2">Show Answer</button>
+                  <br />
+                  <button style={{ visibility: index.position + 1 === 1 ? "hidden" : "" }} onClick={handlePreviousButton} className="btn btn-outline-warning fw-bold">Previous</button>
+                  <br />
+                  <button style={{ visibility: index.position + 1 <= noOfQuestions - 1 ? "" : "hidden" }} onClick={handleNextButton} className="btn btn-outline-primary fw-bold">Next</button>
+                </div>
 
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }

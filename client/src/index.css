@@ -1,8 +1,14 @@
-
+body{
+    background-color: #292b2c;
+}
 
 .card{
-    background-color: #FFD1C7;
-    color: black;
+    /*background-color: #FFD1C7; 
+    color: black; */
     font-weight: bold;
+}
+
+.inst-off-canvas{
+    background: #292b2c;
 }
 

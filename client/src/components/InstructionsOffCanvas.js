@@ -6,13 +6,13 @@ const InstructionsOffCanvas = () => {
         <div className="container mt-4 mb-4">
             <button className="btn btn-outline-info fw-bold" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight">Instructions</button>
 
-            <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasRight">
+            <div className="offcanvas offcanvas-end inst-off-canvas text-light" tabIndex="-1" id="offcanvasRight">
                 <div className="offcanvas-header">
                     <h5 id="offcanvasTopLabel">Instructions</h5>
                     <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div className="offcanvas-body">
-                    <ul className="alert-warning fst-italic fw-bold">
+                    <ul className="alert-light fst-italic fw-bold">
                         <li>Upload an excel sheet</li>
                         <li>The uploaded excel sheet should be in the following format : </li>
                         <ol>
