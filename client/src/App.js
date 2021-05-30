@@ -17,6 +17,10 @@ const App = () => {
     displayAnswer: false
   });
 
+  const [noOfQuestions, setNoOfQuestions] = useState([0]);
+
+
+
   const handleOnChange = (event) => {
     //console.log(event.target.files[0]);
     setState({ ...state, selectedFile: event.target.files[0] });
@@ -38,6 +42,14 @@ const App = () => {
         setValues(actual)
         setState({ ...state, uploaded: true })
         setIndex({ ...index, position: 0, display: false })
+
+        let actual_length = 0
+        actual.map((d, i) => {
+          actual_length = actual_length + 1
+        })
+        //console.log(actual_length)
+        setNoOfQuestions(actual_length)
+
       }).catch(err => { console.log(err) })
 
     }).catch(err => console.log(err))
@@ -58,6 +70,11 @@ const App = () => {
     setIndex({ ...index, displayAnswer: true });
   }
 
+  const handlePreviousButton = (event) => {
+    event.preventDefault();
+    setIndex({ ...index, position: index.position - 1, displayAnswer: false });
+  }
+
 
   const uploadForm = () => {
     return (
@@ -74,11 +91,13 @@ const App = () => {
         </form>
 
         <div className="d-grid gap-2 mt-4">
-          <button onClick={handleDisplayButton} className="btn btn-success">Display Results</button>
+          <button onClick={handleDisplayButton} className="btn btn-success fw-bold">Display Results</button>
         </div>
       </div>
     )
   }
+
+
 
 
   return (
@@ -87,7 +106,7 @@ const App = () => {
       {state.uploaded && index.display && (
         <div className="container mt-4">
           <div className="row">
-            <div className="col-8">
+            <div className="col-lg-8 col-md-6 col-sm-12 col-12">
               <div className="card">
                 <div className="card-body">
                   <p className="fw-bold text-muted">{index.position + 1}</p>
@@ -99,11 +118,13 @@ const App = () => {
                 </div>
               </div>
             </div>
-            <div className="col-4">
-              <div className="d-grid gap-2">
+            <div className="col-lg-4 col-md-6 col-sm-12 col-12">
+              <div className="d-grid">
                 <button onClick={handleAnsweButton} className="btn btn-outline-dark fw-bold mt-2">Show Answer</button>
                 <br />
-                <button onClick={handleNextButton} className="btn btn-outline-primary fw-bold">Next</button>
+                <button style={{ visibility: index.position + 1 == 1 ? "hidden" : "" }} onClick={handlePreviousButton} className="btn btn-outline-warning fw-bold">Previous</button>
+                <br />
+                <button style={{ visibility: index.position + 1 <= noOfQuestions - 1 ? "" : "hidden" }} onClick={handleNextButton} className="btn btn-outline-primary fw-bold">Next</button>
               </div>
 
             </div>
