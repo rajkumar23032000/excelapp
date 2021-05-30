@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { API } from './backend';
-//import { getData } from './components/helper/apicalls';
+import InstructionsOffCanvas from './components/InstructionsOffCanvas';
 
 const App = () => {
 
@@ -102,6 +102,7 @@ const App = () => {
 
   return (
     <div className="container mt-4 p-4">
+      {!index.display && InstructionsOffCanvas()}
       {uploadForm()}
       {state.uploaded && index.display && (
         <div className="container mt-4">
