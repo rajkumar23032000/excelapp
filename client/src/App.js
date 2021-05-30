@@ -27,7 +27,7 @@ const App = () => {
     event.preventDefault();
     const data = new FormData();
     data.append('excel', state.selectedFile);
-    fetch(`${API}/home`, {
+    fetch(`/home`, {
       method: "POST",
       headers: {
         Accept: "application/json"
