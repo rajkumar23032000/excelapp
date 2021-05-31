@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { API } from './backend';
+import AlertBox from './components/AlertBox';
 import InstructionsOffCanvas from './components/InstructionsOffCanvas';
-import Navbar from './components/Navbar';
+import Navbar from "./components/Navbar";
 
 const App = () => {
 
@@ -20,12 +21,30 @@ const App = () => {
 
   const [noOfQuestions, setNoOfQuestions] = useState([0]);
 
+  const [fileType, setFileType] = useState({
+    accept: true
+  });
+
+  const [showUploadForm, setShowUploadForm] = useState(true);
+
 
 
   const handleOnChange = (event) => {
     //console.log(event.target.files[0]);
     setState({ ...state, selectedFile: event.target.files[0] });
     //console.log(state);
+    let fileName = document.getElementById('files').value.toLowerCase();
+    if (!fileName.endsWith('.xlsx') && !fileName.endsWith('.xls')) {
+      setState({ ...state, selectedFile: null })
+      document.getElementById('files').value = "";
+      setFileType({ ...fileType, accept: false });
+      setState({ ...state, selectedFile: null, uploaded: false });
+      setValues({});
+      setNoOfQuestions(0);
+    }
+    else {
+      setFileType({ ...fileType, accept: true });
+    }
   }
 
   const onClickHandle = (event) => {
@@ -60,6 +79,7 @@ const App = () => {
   const handleDisplayButton = (event) => {
     event.preventDefault();
     setIndex({ ...index, display: true });
+    setShowUploadForm(false);
   }
 
   const handleNextButton = (event) => {
@@ -77,14 +97,31 @@ const App = () => {
     setIndex({ ...index, position: index.position - 1, displayAnswer: false });
   }
 
+  const handleHomeButton = (event) => {
+    event.preventDefault();
+    setState({ ...state, selectedFile: null, uploaded: false });
+    setValues({});
+    setIndex({ ...index, position: 0, display: false, displayAnswer: false });
+    setNoOfQuestions(0);
+    setFileType({ ...fileType, accept: true });
+    setShowUploadForm(true);
+  }
+
+  const HomeButton = () => {
+    return (
+      <button onClick={handleHomeButton} className="btn btn-outline-info">Home</button>
+    )
+  }
+
 
   const uploadForm = () => {
     return (
       <div className="container">
+        { !fileType.accept && AlertBox()}
         <form>
           <div className="mb-3">
             <label className="form-label fst-italic text-light">Upload Excel File</label>
-            <input name="excel" onChange={handleOnChange} type="file" className="form-control" encType="multipart/form-data" />
+            <input id="files" name="excel" onChange={handleOnChange} type="file" className="form-control" encType="multipart/form-data" />
           </div>
           <button onClick={onClickHandle} className="btn btn-outline-info fw-bold">Upload</button>
           {state.uploaded && (
@@ -107,7 +144,8 @@ const App = () => {
       <Navbar />
       <div className="container mt-4 p-4">
         {!index.display && InstructionsOffCanvas()}
-        {uploadForm()}
+        {state.uploaded && index.display && HomeButton()}
+        {showUploadForm && uploadForm()}
         {state.uploaded && index.display && (
           <div className="container mt-4">
             <div className="row">
