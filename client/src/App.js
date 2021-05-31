@@ -67,7 +67,7 @@ const App = () => {
     setIndex({ ...index, position: index.position + 1, displayAnswer: false });
   }
 
-  const handleAnsweButton = (event) => {
+  const handleAnswerButton = (event) => {
     event.preventDefault();
     setIndex({ ...index, displayAnswer: true });
   }
@@ -86,7 +86,7 @@ const App = () => {
             <label className="form-label fst-italic text-light">Upload Excel File</label>
             <input name="excel" onChange={handleOnChange} type="file" className="form-control" encType="multipart/form-data" />
           </div>
-          <button onClick={onClickHandle} className="btn btn-outline-info">Upload</button>
+          <button onClick={onClickHandle} className="btn btn-outline-info fw-bold">Upload</button>
           {state.uploaded && (
             <h3 className="badge bg-success rounded-pill">File Uploaded Successfully!!</h3>
           )}
@@ -114,18 +114,25 @@ const App = () => {
               <div className="col-lg-8 col-md-6 col-sm-12 col-12">
                 <div className="card">
                   <div className="card-body">
-                    <p className="fw-bold text-muted">{index.position + 1}</p>
+                    <p className="fw-bold text-muted">{index.position + 1} / {noOfQuestions}</p>
                     <p className="card-text">{values[index.position]['Question']}</p>
-                    {index.displayAnswer && (
-                      <h3 className="text-success fw-bold">Answer : {values[index.position]['Answer']}
-                      </h3>
-                    )}
                   </div>
                 </div>
+
+                {!index.displayAnswer && (
+                  <button onClick={handleAnswerButton} className="container mt-4 btn btn-outline-success fw-bold">
+                    Answer
+                  </button>
+                )}
+                {index.displayAnswer && (
+                  <div className="container mt-4 bg-light fw-bold answer-div">
+                    <p className="fw-bold text-success lh-lg">{values[index.position]['Answer']}</p>
+                  </div>
+                )}
+
               </div>
               <div className="col-lg-4 col-md-6 col-sm-12 col-12">
                 <div className="d-grid">
-                  <button onClick={handleAnsweButton} className="btn btn-outline-info fw-bold mt-2">Show Answer</button>
                   <br />
                   <button style={{ visibility: index.position + 1 === 1 ? "hidden" : "" }} onClick={handlePreviousButton} className="btn btn-outline-warning fw-bold">Previous</button>
                   <br />
@@ -133,6 +140,7 @@ const App = () => {
                 </div>
 
               </div>
+
             </div>
           </div>
         )}
